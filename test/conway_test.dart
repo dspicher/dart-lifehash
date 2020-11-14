@@ -50,7 +50,7 @@ void main() {
     test('correctly initializes', () {
       var digest = sha256.convert(utf8.encode('foo'));
       var bytes = digest.bytes;
-      var grid = Grid.digest(digest);
+      var grid = Grid.bytes(bytes);
       for (int row = 0; row < 16; row++) {
         var firstByte = bytes[2 * row];
         for (int i = 0; i < 8; i++) {

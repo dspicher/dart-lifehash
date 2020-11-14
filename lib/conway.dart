@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 
 final neighbours = [
@@ -19,9 +18,8 @@ class Grid {
     state = List.generate(size, (_) => List.generate(size, (_) => 0));
   }
 
-  Grid.digest(Digest digest) {
+  Grid.bytes(List<int> bytes) {
     size = 16;
-    var bytes = digest.bytes;
     state = List.generate(16, (_) => List.generate(16, (_) => 0));
     for (int row = 0; row < 16; row++) {
       var firstByte = bytes[2 * row];

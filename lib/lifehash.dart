@@ -28,7 +28,7 @@ List<List<double>> combineStates(List<List<List<int>>> states) {
 
 List<List<Color>> lifehash(List<int> bytes) {
   var digest = sha256.convert(bytes);
-  var grayValues = grayscale(Grid.digest(digest));
+  var grayValues = grayscale(Grid.bytes(digest.bytes));
   var entropy = Entropy.fromBytes(digest.bytes);
   var colors = chooseGradient(entropy);
   var symmetric =
