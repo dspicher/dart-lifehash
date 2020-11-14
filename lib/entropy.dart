@@ -6,20 +6,20 @@ class Entropy {
         bits.add(byte >> (7 - i) & 1);
       }
     }
-    this.remainingBits = bits;
+    remainingBits = bits;
   }
 
   List<int> remainingBits;
 
   bool nextBool() {
-    var value = this.remainingBits.removeAt(0);
+    var value = remainingBits.removeAt(0);
     return value > 0;
   }
 
   int nextUInt(int bits) {
     var result = 0;
     for (int i = 0; i < bits; i++) {
-      var currentBit = this.remainingBits.removeAt(0);
+      var currentBit = remainingBits.removeAt(0);
       result = result << 1;
       result = result | currentBit;
     }

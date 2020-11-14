@@ -14,21 +14,18 @@ void main() {
     });
 
     test('keeps block static', () {
-      var block = Grid.zero(4);
-      block.set(1, 1, true);
-      block.set(1, 2, true);
-      block.set(2, 1, true);
-      block.set(2, 2, true);
+      var block = Grid.zero(4)
+        ..set(1, 1, true)
+        ..set(1, 2, true)
+        ..set(2, 1, true)
+        ..set(2, 2, true);
       var initial = block.state;
       block.evolve();
       expect(block.state, initial);
     });
 
     test('oscillates the blinker', () {
-      var osc = Grid.zero(5);
-      osc.set(2, 1, true);
-      osc.set(2, 2, true);
-      osc.set(2, 3, true);
+      var osc = Grid.zero(5)..set(2, 1, true)..set(2, 2, true)..set(2, 3, true);
       var initial = osc.state;
       osc.evolve();
       expect(osc.state, isNot(equals(initial)));
@@ -37,12 +34,12 @@ void main() {
     });
 
     test('wraps the glider around', () {
-      var glider = Grid.zero(5);
-      glider.set(1, 2, true);
-      glider.set(2, 0, true);
-      glider.set(2, 2, true);
-      glider.set(3, 1, true);
-      glider.set(3, 2, true);
+      var glider = Grid.zero(5)
+        ..set(1, 2, true)
+        ..set(2, 0, true)
+        ..set(2, 2, true)
+        ..set(3, 1, true)
+        ..set(3, 2, true);
       var initial = glider.state;
       for (int i = 0; i < 5 * 4; i++) {
         glider.evolve();
@@ -51,7 +48,7 @@ void main() {
     });
 
     test('correctly initializes', () {
-      var digest = sha256.convert(utf8.encode("foo"));
+      var digest = sha256.convert(utf8.encode('foo'));
       var bytes = digest.bytes;
       var grid = Grid.digest(digest);
       for (int row = 0; row < 16; row++) {
@@ -68,11 +65,11 @@ void main() {
   });
   group('converge', () {
     test('returns a single state for the static block', () {
-      var block = Grid.zero(4);
-      block.set(1, 1, true);
-      block.set(1, 2, true);
-      block.set(2, 1, true);
-      block.set(2, 2, true);
+      var block = Grid.zero(4)
+        ..set(1, 1, true)
+        ..set(1, 2, true)
+        ..set(2, 1, true)
+        ..set(2, 2, true);
       var initial = block.state;
       var states = converge(block, 10);
       expect(states.length, 1);
@@ -80,28 +77,25 @@ void main() {
     });
 
     test('returns two states for the blinker', () {
-      var osc = Grid.zero(5);
-      osc.set(2, 1, true);
-      osc.set(2, 2, true);
-      osc.set(2, 3, true);
+      var osc = Grid.zero(5)..set(2, 1, true)..set(2, 2, true)..set(2, 3, true);
       var initial = osc.state;
       var states = converge(osc, 10);
       expect(states.length, 2);
       expect(states[0], initial);
-      var second = Grid.zero(5);
-      second.set(1, 2, true);
-      second.set(2, 2, true);
-      second.set(3, 2, true);
+      var second = Grid.zero(5)
+        ..set(1, 2, true)
+        ..set(2, 2, true)
+        ..set(3, 2, true);
       expect(states[1], second.state);
     });
 
     test('returns 20 states for the glider', () {
-      var glider = Grid.zero(5);
-      glider.set(1, 2, true);
-      glider.set(2, 0, true);
-      glider.set(2, 2, true);
-      glider.set(3, 1, true);
-      glider.set(3, 2, true);
+      var glider = Grid.zero(5)
+        ..set(1, 2, true)
+        ..set(2, 0, true)
+        ..set(2, 2, true)
+        ..set(3, 1, true)
+        ..set(3, 2, true);
       var states = converge(glider, 10);
       expect(states.length, 10);
       states = converge(glider, 100);

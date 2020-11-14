@@ -20,7 +20,7 @@ class Grid {
   }
 
   Grid.digest(Digest digest) {
-    this.size = 16;
+    size = 16;
     var bytes = digest.bytes;
     state = List.generate(16, (_) => List.generate(16, (_) => 0));
     for (int row = 0; row < 16; row++) {
@@ -41,7 +41,7 @@ class Grid {
   }
 
   int hash() {
-    return hashList(state.map((l) => hashList(l)));
+    return hashList(state.map(hashList));
   }
 
   void evolve() {
@@ -62,14 +62,13 @@ class Grid {
         }
       }
     }
-    this.state = newGrid;
+    state = newGrid;
   }
 }
 
 List<List<List<int>>> converge(Grid grid, int maxIter) {
   var allStates = [grid.state];
-  var encountered = HashSet<int>();
-  encountered.add(grid.hash());
+  var encountered = HashSet<int>()..add(grid.hash());
   for (int i = 1; i < maxIter; i++) {
     grid.evolve();
     if (encountered.contains(grid.hash())) {

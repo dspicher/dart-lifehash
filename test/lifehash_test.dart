@@ -5,10 +5,7 @@ import 'package:lifehash/lifehash.dart';
 void main() {
   group('grayscale', () {
     test('returns correctly for blinker', () {
-      var osc = Grid.zero(5);
-      osc.set(2, 1, true);
-      osc.set(2, 2, true);
-      osc.set(2, 3, true);
+      var osc = Grid.zero(5)..set(2, 1, true)..set(2, 2, true)..set(2, 3, true);
       var gray = grayscale(osc);
       expect(gray, [
         [0, 0, 0, 0, 0],

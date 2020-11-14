@@ -53,10 +53,9 @@ List<Color> triadicGradient(double spectrum, double lighterAdvance,
     double darkerAdvance, bool isReversed) {
   var spectrum2 = (spectrum + 1 / 3) % 1;
   var spectrum3 = (spectrum + 2 / 3) % 1;
-  var colors =
-      [spectrum, spectrum2, spectrum3].map((f) => spectrumColor(f)).toList();
-  colors.sort((col1, col2) =>
-      (col1.computeLuminance() - col2.computeLuminance()).ceil());
+  var colors = [spectrum, spectrum2, spectrum3].map(spectrumColor).toList()
+    ..sort((col1, col2) =>
+        (col1.computeLuminance() - col2.computeLuminance()).ceil());
   var adjustedLighter = Color.lerp(colors[2], white, lighterAdvance * 0.3);
   var adjustedDarker = Color.lerp(colors[0], black, darkerAdvance * 0.3);
   var gradientColors = [adjustedLighter, colors[1], adjustedDarker];
@@ -75,9 +74,8 @@ List<Color> analgousGradient(
   var spectrum2 = (spectrum1 + 1 / 12) % 1;
   var spectrum3 = (spectrum1 + 2 / 12) % 1;
   var spectrum4 = (spectrum1 + 3 / 12) % 1;
-  var colors = [spectrum1, spectrum2, spectrum3, spectrum4]
-      .map((s) => spectrumColor(s))
-      .toList();
+  var colors =
+      [spectrum1, spectrum2, spectrum3, spectrum4].map(spectrumColor).toList();
   if (colors[0].computeLuminance() > colors[3].computeLuminance()) {
     colors = colors.reversed.toList();
   }
@@ -107,15 +105,14 @@ List<Color> chooseMonochrome(Entropy entropy) {
 
 List<Color> monochromeGradient(double hue, bool isTint, bool isReversed,
     double keyAdvance, double neutralAdvance) {
-  var keyColor = HSVColor.fromAHSV(1.0, hue, 1.0, 1.0).toColor();
+  var keyColor = HSVColor.fromAHSV(1, hue, 1, 1).toColor();
   var contrastBrightness = isTint ? 1.0 : 0.0;
   if (isTint) {
-    keyColor.withRed((keyColor.red * 2 / 3).round());
-    keyColor.withGreen((keyColor.green * 2 / 3).round());
-    keyColor.withBlue((keyColor.blue * 2 / 3).round());
+    keyColor.withRed((keyColor.red * 2 / 3).round())
+      ..withGreen((keyColor.green * 2 / 3).round())
+      ..withBlue((keyColor.blue * 2 / 3).round());
   }
-  var neutralColor =
-      HSVColor.fromAHSV(1.0, 0.0, 0.0, contrastBrightness).toColor();
+  var neutralColor = HSVColor.fromAHSV(1, 0, 0, contrastBrightness).toColor();
   var keyColor2 = Color.lerp(keyColor, neutralColor, keyAdvance * 0.3 + 0.05);
   var neutralColor2 =
       Color.lerp(neutralColor, keyColor, keyAdvance * 0.3 + 0.05);
