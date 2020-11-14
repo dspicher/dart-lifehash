@@ -46,8 +46,7 @@ List<Color> triadicGradient(Entropy entropy) {
   bool isReversed = entropy.nextBool();
 
   var colors = [spectrum1, spectrum2, spectrum3].map(spectrumColor).toList()
-    ..sort((col1, col2) =>
-        (col1.computeLuminance().compareTo(col2.computeLuminance())));
+    ..sort((col1, col2) => (luminance(col1).compareTo(luminance(col2))));
   var adjustedLighter = Color.lerp(colors[2], white, lighterAdvance);
   var adjustedDarker = Color.lerp(colors[0], black, darkerAdvance);
   var gradientColors = [adjustedLighter, colors[1], adjustedDarker];
@@ -87,12 +86,12 @@ List<Color> monochromeGradient(Entropy entropy) {
   double keyAdvance = entropy.nextFrac() * 0.3 + 0.05;
   double neutralAdvance = entropy.nextFrac() * 0.3 + 0.05;
 
-  var keyColor = HSVColor.fromAHSV(1, hue, 1, 1).toColor();
+  var keyColor = HSVColor.fromAHSV(1, 360.0 * hue, 1, 1).toColor();
   var contrastBrightness = isTint ? 1.0 : 0.0;
   if (isTint) {
-    keyColor.withRed((keyColor.red / 2).round())
-      ..withGreen((keyColor.green / 2).round())
-      ..withBlue((keyColor.blue * 2).round());
+    keyColor = keyColor.withRed((keyColor.red / 2).round());
+    keyColor = keyColor.withGreen((keyColor.green / 2).round());
+    keyColor = keyColor.withBlue((keyColor.blue / 2).round());
   }
   var neutralColor = HSVColor.fromAHSV(1, 0, 0, contrastBrightness).toColor();
   var keyColor2 = Color.lerp(keyColor, neutralColor, keyAdvance);
@@ -132,3 +131,7 @@ const spectrumColors = [
   Color.fromARGB(255, 0, 158, 84),
   Color.fromARGB(255, 0, 168, 222),
 ];
+
+double luminance(Color color) {
+  return 0.2126 * color.red + 0.7152 * color.green + 0.0722 * color.blue;
+}
