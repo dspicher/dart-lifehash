@@ -1,5 +1,6 @@
 Dart lifehash
 =============
+[<img alt="build status" src="https://img.shields.io/github/workflow/status/dspicher/dart-lifehash/Dart/master?logo=github" height="20">](https://github.com/dspicher/dart-lifehash/actions)
 
 [Lifehash](https://github.com/BlockchainCommons/Research/blob/master/papers/bcr-2020-005-ur.md) is a
 > method of hash visualization based on Conway’s Game of Life that creates beautiful icons that are deterministic, yet distinct and unique given the input data.
