@@ -76,36 +76,40 @@ Widget flippingBits(BuildContext context) {
     return result;
   }
 
-  return Column(children: <Widget>[
-    Padding(
-      padding: EdgeInsets.all(10),
-      child: Text(
-        'Starting from x=sha256(utf8("BitFlip")), the i-th picture shows the lifehash of x with the i-th bit flipped',
-        textAlign: TextAlign.center,
+  return Column(
+    children: <Widget>[
+      Padding(
+        padding: EdgeInsets.all(10),
+        child: Text(
+          'Starting from x=sha256(utf8("BitFlip")), the i-th picture shows the lifehash of x with the i-th bit flipped',
+          textAlign: TextAlign.center,
+        ),
       ),
-    ),
-    Expanded(
-      child: lifehashGrid(256, flipIthBit),
-    )
-  ]);
+      Expanded(
+        child: lifehashGrid(256, flipIthBit),
+      )
+    ],
+  );
 }
 
 Widget demoGallery(BuildContext context) {
-  return Column(children: <Widget>[
-    Padding(
-      padding: EdgeInsets.all(10),
-      child: Text(
-        'The i-th picture shows the lifehash of utf8(string(i))',
-        textAlign: TextAlign.center,
+  return Column(
+    children: <Widget>[
+      Padding(
+        padding: EdgeInsets.all(10),
+        child: Text(
+          'The i-th picture shows the lifehash of utf8(string(i))',
+          textAlign: TextAlign.center,
+        ),
       ),
-    ),
-    Expanded(
-      child: lifehashGrid(
-        256,
-        (i) => utf8.encode(i.toString()),
-      ),
-    )
-  ]);
+      Expanded(
+        child: lifehashGrid(
+          256,
+          (i) => utf8.encode(i.toString()),
+        ),
+      )
+    ],
+  );
 }
 
 Widget lifehashGrid(int count, Function ithBytes) {
@@ -115,28 +119,29 @@ Widget lifehashGrid(int count, Function ithBytes) {
     child: GridView.count(
       crossAxisCount: 2,
       children: List.generate(
-          count,
-          (index) => Container(
-                height: size * 32 + 20,
-                width: size * 32,
-                child: Center(
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        width: 32 * size,
-                        height: 32 * size,
-                        child: CustomPaint(
-                          painter: LifehashPainter(
-                            size,
-                            ithBytes(index),
-                          ),
-                        ),
-                      ),
-                      Text(index.toString())
-                    ],
+        count,
+        (index) => Container(
+          height: size * 32 + 20,
+          width: size * 32,
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 32 * size,
+                  height: 32 * size,
+                  child: CustomPaint(
+                    painter: LifehashPainter(
+                      size,
+                      ithBytes(index),
+                    ),
                   ),
                 ),
-              )),
+                Text(index.toString())
+              ],
+            ),
+          ),
+        ),
+      ),
     ),
   );
 }
