@@ -9,9 +9,9 @@ environment:
   flutter: ">=1.20.0"
 
 dependencies:
+  crypto: ^2.1.5
   flutter:
     sdk: flutter
-  crypto: ^2.1.5
 
 dev_dependencies:
   flutter_test:
