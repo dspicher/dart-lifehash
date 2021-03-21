@@ -10,7 +10,7 @@ void main() {
   group('grayscale', () {
     test('returns correctly for blinker', () {
       var osc = Grid.zero(5)..set(2, 1, true)..set(2, 2, true)..set(2, 3, true);
-      var gray = grayscale(osc);
+      var gray = grayscale(osc, Version.v1);
       expect(gray, [
         [0, 0, 0, 0, 0],
         [0, 0, 1, 0, 0],
@@ -23,7 +23,8 @@ void main() {
 
   group('lifehash', () {
     test('returns correctly for "lifehash"', () {
-      var lh = lifehash(sha256.convert(utf8.encode('lifehash')).bytes, Version.v1);
+      var lh =
+          lifehash(sha256.convert(utf8.encode('lifehash')).bytes, Version.v1);
       var diagonal = [
         Color(0xff43a5c6),
         Color(0xff43a5c6),
