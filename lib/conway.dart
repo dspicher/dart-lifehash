@@ -19,14 +19,21 @@ class Grid {
   }
 
   Grid.bytes(List<int> bytes) {
-    size = 16;
-    state = List.generate(16, (_) => List.generate(16, (_) => 0));
-    for (int row = 0; row < 16; row++) {
-      var firstByte = bytes[2 * row];
-      var secondByte = bytes[2 * row + 1];
-      for (int i = 0; i < 8; i++) {
-        state[row][7 - i] = firstByte >> i & 1;
-        state[row][8 + 7 - i] = secondByte >> i & 1;
+    if (bytes.length == 32) {
+      size = 16;
+    } else if (bytes.length == 128) {
+      size = 32;
+    } else {
+      throw Exception('invalid implied size');
+    }
+    int bytesPerRow = (size / 8).round();
+    state = List.generate(size, (_) => List.generate(size, (_) => 0));
+    for (int row = 0; row < size; row++) {
+      for (int j = 0; j < bytesPerRow; j++) {
+        var byte = bytes[bytesPerRow * row + j];
+        for (int i = 0; i < 8; i++) {
+          state[row][8 * j + 7 - i] = byte >> i & 1;
+        }
       }
     }
   }
