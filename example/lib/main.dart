@@ -154,7 +154,7 @@ class LifehashPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size _size) {
     var paint = Paint()..style = PaintingStyle.fill;
-    var colors = lifehash(bytes);
+    var colors = lifehash(bytes, Version.v1);
     for (var x = 0; x < 32; x++) {
       for (var y = 0; y < 32; y++) {
         paint.color = colors[y][x];

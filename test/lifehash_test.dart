@@ -23,7 +23,7 @@ void main() {
 
   group('lifehash', () {
     test('returns correctly for "lifehash"', () {
-      var lh = lifehash(sha256.convert(utf8.encode('lifehash')).bytes);
+      var lh = lifehash(sha256.convert(utf8.encode('lifehash')).bytes, Version.v1);
       var diagonal = [
         Color(0xff43a5c6),
         Color(0xff43a5c6),
