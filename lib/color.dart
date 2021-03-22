@@ -84,7 +84,6 @@ List<Color> monochromeGradient(Entropy entropy) {
   bool isTint = entropy.nextBool();
   bool isReversed = entropy.nextBool();
   double keyAdvance = entropy.nextFrac() * 0.3 + 0.05;
-  // ignore: unused_local_variable
   double neutralAdvance = entropy.nextFrac() * 0.3 + 0.05;
   var keyColor = HSVColor.fromAHSV(1, 360.0 * hue, 1, 1).toColor();
   var contrastBrightness = isTint ? 1.0 : 0.0;
@@ -95,7 +94,7 @@ List<Color> monochromeGradient(Entropy entropy) {
   }
   var neutralColor = HSVColor.fromAHSV(1, 0, 0, contrastBrightness).toColor();
   var keyColor2 = Color.lerp(keyColor, neutralColor, keyAdvance);
-  var neutralColor2 = Color.lerp(neutralColor, keyColor, keyAdvance);
+  var neutralColor2 = Color.lerp(neutralColor, keyColor, neutralAdvance);
   var colors = [keyColor2, neutralColor2];
   return isReversed ? colors.reversed.toList() : colors;
 }
