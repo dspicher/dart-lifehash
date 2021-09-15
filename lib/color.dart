@@ -3,25 +3,36 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:lifehash/entropy.dart';
+import 'package:lifehash/lifehash.dart';
 
-List<Color> chooseGradient(Entropy entropy) {
+List<Color> chooseGradient(Entropy entropy, Version version) {
+  if (version == Version.grayscale_fiducial) {
+    return chooseGrayscale(entropy);
+  }
+
   return entropy.nextBool()
       ? (entropy.nextBool()
-          ? analgousGradient(entropy)
-          : triadicGradient(entropy))
+          ? analgousGradient(entropy, spectrumColor)
+          : triadicGradient(entropy, spectrumColor))
       : (entropy.nextBool()
-          ? complementaryGradient(entropy)
-          : monochromeGradient(entropy));
+          ? complementaryGradient(entropy, spectrumColor)
+          : monochromeGradient(entropy, hsbColor));
 }
 
-List<Color> complementaryGradient(Entropy entropy) {
+Color hsbColor(double hue) {
+  return HSVColor.fromAHSV(1, 360.0 * hue, 1, 1).toColor();
+}
+
+List<Color> chooseGrayscale(Entropy entropy) {}
+
+List<Color> complementaryGradient(Entropy entropy, Function hueGenerator) {
   var spectrum1 = entropy.nextFrac();
   var lighterAdvance = entropy.nextFrac() * 0.3;
   var darkerAdvance = entropy.nextFrac() * 0.3;
   bool isReversed = entropy.nextBool();
   var spectrum2 = (spectrum1 + 0.5) % 1;
-  var color1 = spectrumColor(spectrum1);
-  var color2 = spectrumColor(spectrum2);
+  var color1 = hueGenerator(spectrum1);
+  var color2 = hueGenerator(spectrum2);
   var darkerColor;
   var lighterColor;
   if (color1.computeLuminance() > color2.computeLuminance()) {
@@ -37,7 +48,7 @@ List<Color> complementaryGradient(Entropy entropy) {
   return isReversed ? colors.reversed.toList() : colors;
 }
 
-List<Color> triadicGradient(Entropy entropy) {
+List<Color> triadicGradient(Entropy entropy, Function hueGenerator) {
   var spectrum1 = entropy.nextFrac();
   var spectrum2 = (spectrum1 + 1 / 3) % 1;
   var spectrum3 = (spectrum1 + 2 / 3) % 1;
@@ -45,7 +56,7 @@ List<Color> triadicGradient(Entropy entropy) {
   var darkerAdvance = entropy.nextFrac() * 0.3;
   bool isReversed = entropy.nextBool();
 
-  var colors = [spectrum1, spectrum2, spectrum3].map(spectrumColor).toList()
+  var colors = [spectrum1, spectrum2, spectrum3].map(hueGenerator).toList()
     ..sort((col1, col2) => (luminance(col1).compareTo(luminance(col2))));
   var adjustedLighter = Color.lerp(colors[2], white, lighterAdvance);
   var adjustedDarker = Color.lerp(colors[0], black, darkerAdvance);
@@ -53,7 +64,7 @@ List<Color> triadicGradient(Entropy entropy) {
   return isReversed ? gradientColors.reversed.toList() : gradientColors;
 }
 
-List<Color> analgousGradient(Entropy entropy) {
+List<Color> analgousGradient(Entropy entropy, Function hueGenerator) {
   var spectrum1 = entropy.nextFrac();
   var advance = entropy.nextFrac() * 0.5 + 0.2;
   bool isReversed = entropy.nextBool();
@@ -62,7 +73,7 @@ List<Color> analgousGradient(Entropy entropy) {
   var spectrum3 = (spectrum1 + 2 / 12) % 1;
   var spectrum4 = (spectrum1 + 3 / 12) % 1;
   var colors =
-      [spectrum1, spectrum2, spectrum3, spectrum4].map(spectrumColor).toList();
+      [spectrum1, spectrum2, spectrum3, spectrum4].map(hueGenerator).toList();
   if (colors[0].computeLuminance() > colors[3].computeLuminance()) {
     colors = colors.reversed.toList();
   }
@@ -79,13 +90,13 @@ List<Color> analgousGradient(Entropy entropy) {
   return isReversed ? gradientColors.reversed.toList() : gradientColors;
 }
 
-List<Color> monochromeGradient(Entropy entropy) {
+List<Color> monochromeGradient(Entropy entropy, Function hueGenerator) {
   double hue = entropy.nextFrac();
   bool isTint = entropy.nextBool();
   bool isReversed = entropy.nextBool();
   double keyAdvance = entropy.nextFrac() * 0.3 + 0.05;
   double neutralAdvance = entropy.nextFrac() * 0.3 + 0.05;
-  var keyColor = HSVColor.fromAHSV(1, 360.0 * hue, 1, 1).toColor();
+  var keyColor = hueGenerator(hue);
   var contrastBrightness = isTint ? 1.0 : 0.0;
   if (isTint) {
     keyColor = keyColor.withRed((keyColor.red / 2).round());
@@ -101,6 +112,10 @@ List<Color> monochromeGradient(Entropy entropy) {
 
 Color spectrumColor(double frac) {
   return lerpMany(spectrumColors, frac);
+}
+
+Color cmykSafespectrumColor(double frac) {
+  return lerpMany(spectrumCMYKSafe, frac);
 }
 
 Color lerpMany(List<Color> colors, double frac) {
@@ -127,6 +142,16 @@ const spectrumColors = [
   Color.fromARGB(255, 233, 19, 136),
   Color.fromARGB(255, 235, 45, 46),
   Color.fromARGB(255, 253, 233, 43),
+  Color.fromARGB(255, 0, 158, 84),
+  Color.fromARGB(255, 0, 168, 222),
+];
+
+const spectrumCMYKSafe = [
+  Color.fromARGB(255, 0, 168, 222),
+  Color.fromARGB(255, 41, 60, 130),
+  Color.fromARGB(255, 210, 59, 130),
+  Color.fromARGB(255, 217, 63, 53),
+  Color.fromARGB(255, 244, 228, 81),
   Color.fromARGB(255, 0, 158, 84),
   Color.fromARGB(255, 0, 168, 222),
 ];

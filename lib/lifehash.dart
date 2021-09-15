@@ -65,7 +65,7 @@ List<List<Color>> lifehash(List<int> bytes, Version version) {
   } else if (version == Version.v2) {
     entropy.nextUInt(2);
   }
-  var colors = chooseGradient(entropy);
+  var colors = chooseGradient(entropy, version);
   var symmetric =
       entropy.nextBool() ? snowflake(grayValues) : pinwheel(grayValues);
   return symmetric
